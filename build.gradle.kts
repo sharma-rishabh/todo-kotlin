@@ -21,6 +21,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("com.google.code.gson:gson:2.10.1")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
