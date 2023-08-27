@@ -11,7 +11,7 @@ data class Task(val id:Int, var description: String, var isDone:Boolean = false,
         return true
     }
 
-    fun markUndone(): Boolean {
+    fun markPending(): Boolean {
         this.isDone = false
         return true
     }

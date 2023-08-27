@@ -1,7 +1,5 @@
 package com.sharma.rishabh.todo.models
 
-import org.springframework.context.annotation.Description
-
 data class TaskGroup(
     val groupName: String,
     val tasks: MutableList<Task>,
@@ -35,15 +33,15 @@ data class TaskGroup(
         return id
     }
 
-    fun markUndone(id: Int): Int {
+    fun markPending(id: Int): Int {
         val task = this.findTask(id)
-        task.markUndone()
+        task.markPending()
         return id
     }
 
     fun updateDescription(id: Int, newDescription: String): Int {
         val task = this.findTask(id)
-        task.markUndone()
+        task.markPending()
         return id
     }
 
