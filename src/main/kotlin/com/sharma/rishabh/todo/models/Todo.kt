@@ -13,27 +13,42 @@ data class Todo(val todos: MutableMap<String, TaskGroup>) {
     }
 
     fun listGroups(): MutableSet<String> {
-        return todos.keys
+        return todos.keys.filter { !todos[it]!!.isDeleted }.toMutableSet()
     }
 
     fun addTask(groupName: String, taskDescription: String): Int {
         val taskGroup = this.todos[groupName]
-        return taskGroup!!.createTask(taskDescription)
+        if(taskGroup!!.isDeleted) {
+            return -1
+        }
+        return taskGroup.createTask(taskDescription)
     }
     fun removeTask(groupName: String, taskId: Int): Int {
         val taskGroup = this.todos[groupName]
-        return taskGroup!!.removeTask(taskId)
+        if(taskGroup!!.isDeleted) {
+            return -1
+        }
+        return taskGroup.removeTask(taskId)
     }
     fun markDone(groupName: String, taskId: Int): Int {
         val taskGroup = this.todos[groupName]
-        return taskGroup!!.markDone(taskId)
+        if(taskGroup!!.isDeleted) {
+            return -1
+        }
+        return taskGroup.markDone(taskId)
     }
     fun markPending(groupName: String, taskId: Int): Int {
         val taskGroup = this.todos[groupName]
-        return taskGroup!!.removeTask(taskId)
+        if(taskGroup!!.isDeleted) {
+            return -1
+        }
+        return taskGroup.markPending(taskId)
     }
     fun listTasks(groupName: String): List<Task> {
         val taskGroup = this.todos[groupName]
-        return taskGroup!!.listTasks()
+        if(taskGroup!!.isDeleted) {
+            return emptyList()
+        }
+        return taskGroup.listTasks()
     }
 }

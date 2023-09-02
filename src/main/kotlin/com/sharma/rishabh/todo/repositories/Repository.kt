@@ -5,8 +5,8 @@ import com.sharma.rishabh.todo.models.Todo
 
 interface Repository {
     val todo: Todo?
-    fun loadTodo()
-    fun saveTodo()
+    fun loadTodo(): Boolean
+    fun saveTodo(): Boolean
     fun listGroups(): MutableSet<String>
     fun addGroup(groupName: String):Boolean
     fun removeGroup(groupName: String):Boolean

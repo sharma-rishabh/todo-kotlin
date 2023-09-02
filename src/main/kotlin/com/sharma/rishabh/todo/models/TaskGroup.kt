@@ -15,7 +15,7 @@ data class TaskGroup(
         return id
     }
 
-    fun findTask(id: Int): Task {
+    private fun findTask(id: Int): Task {
         return this.tasks.first {
             it.id == id
         }
@@ -53,6 +53,7 @@ data class TaskGroup(
 
     fun delete(): Boolean {
         this.isDeleted = true
+        this.tasks.forEach{it.delete()}
         return isDeleted
     }
 }

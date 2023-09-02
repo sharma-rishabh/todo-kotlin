@@ -5,19 +5,43 @@ import com.sharma.rishabh.todo.models.Task
 import com.sharma.rishabh.todo.models.Todo
 import com.sharma.rishabh.todo.repositories.Repository
 import java.io.File
+import java.nio.file.Paths
+import kotlin.io.path.createDirectory
+import kotlin.io.path.exists
 
-class FSRespository(val path: String): Repository {
-    val gson = Gson()
-    val file = File(path)
+class FSRepository(private val path: String): Repository {
+    private val gson = Gson()
+    private val file = File(path)
     override var todo: Todo? = null
 
-    override fun loadTodo() {
+    companion object {
+        fun intialize(home: String): FSRepository  {
+            val homePath = Paths.get(home)
+            val todoDir = ".todo"
+            val dataFile = "data.json"
+            val dirPath = homePath.resolve(Paths.get(todoDir))
+            if (!dirPath.exists()) {
+               dirPath.createDirectory()
+            }
+            val dataPath = dirPath.resolve(Paths.get(dataFile))
+            if(!dataPath.exists()) {
+                val file = File(dataPath.toString())
+                file.writeText("{\"todos\":{}}")
+            }
+            val todo = FSRepository(dataPath.toString())
+            todo.loadTodo()
+            return todo
+        }
+    }
+    override fun loadTodo(): Boolean {
         val todoJSON = file.readText(Charsets.UTF_8)
         this.todo = gson.fromJson(todoJSON, Todo::class.java)
+        return true
     }
 
-    override fun saveTodo() {
+    override fun saveTodo(): Boolean {
         file.writeText(gson.toJson(todo))
+        return true
     }
 
     override fun listGroups(): MutableSet<String> {
