@@ -1,69 +1,75 @@
 package com.sharma.rishabh.todo
 
 import com.sharma.rishabh.todo.repositories.Repository
+import com.sharma.rishabh.todo.views.View
 
-val  handleAddTask: (List<String>, Repository) -> Unit = { args, repository ->
+val  handleAddTask: (List<String>, Repository, View) -> Unit = { args, repository, view ->
     val groupName: String = args[1]
     val taskName: String = args[2]
     val response = repository.addTask(groupName, taskName)
     repository.saveTodo()
-    println("Task added to $groupName with id $response .")
+    view.showAddTaskResponse(response, groupName)
 }
-val  handleRemoveTask: (List<String>, Repository) -> Unit = { args, repository ->
+
+val  handleRemoveTask: (List<String>, Repository, View) -> Unit = { args, repository, view ->
     val groupName = args[1]
     val taskId = args[2].toInt()
     val response = repository.removeTask(groupName, taskId)
     repository.saveTodo()
-    println("Task removed from $groupName with id $response .")
+    view.showRemoveTaskResponse(taskId, response, groupName)
 }
 
-val  handleAddGroup: (List<String>, Repository) -> Unit = { args, repository ->
+val  handleAddGroup: (List<String>, Repository, View) -> Unit = { args, repository, view ->
     val groupName: String = args[1]
     val response = repository.addGroup(groupName)
     repository.saveTodo()
-    println("Group $response added.")
+    view.showAddGroupResponse(response, groupName)
 }
-val  handleRemoveGroup: (List<String>, Repository) -> Unit = { args, repository ->
+
+val  handleRemoveGroup: (List<String>, Repository, View) -> Unit = { args, repository, view ->
     val groupName: String = args[1]
     val response = repository.removeGroup(groupName)
     repository.saveTodo()
-    println("Group $response removed.")
+    view.showRemoveGroupResponse(response, groupName)
 }
 
-val  handleMarkDone: (List<String>, Repository) -> Unit = { args, repository ->
+val  handleMarkDone: (List<String>, Repository, View) -> Unit = { args, repository, view ->
     val groupName: String = args[1]
     val taskId = args[2].toInt()
     val response = repository.markDone(groupName, taskId)
     repository.saveTodo()
-    println("Task $response in group $groupName marked done.")
+    view.showMarkDoneResponse(taskId, response, groupName)
 }
 
-
-val  handleMarkPending: (List<String>, Repository) -> Unit = { args, repository ->
+val  handleMarkPending: (List<String>, Repository, View) -> Unit = { args, repository, view ->
     val groupName: String = args[1]
     val taskId = args[2].toInt()
     val response = repository.markPending(groupName, taskId)
     repository.saveTodo()
-    println("Task $response in group $groupName marked done.")
+    view.showMarkPendingResponse(taskId, response, groupName)
 }
 
-val  handleListTasks: (List<String>, Repository) -> Unit = { args, repository ->
+val  handleListTasks: (List<String>, Repository, View) -> Unit = { args, repository, view ->
     val groupName: String = args[1]
     val response = repository.listTasks(groupName)
-    println(response)
+    view.showListTasksResponse(response, groupName)
 }
 
-val  handleListGroups: (List<String>, Repository) -> Unit = { args, repository ->
+val  handleListGroups: (List<String>, Repository, View) -> Unit = { args, repository, view ->
     val response = repository.listGroups()
-    println(response)
+    view.showListGroupResponse(response)
 }
 
 
-val  handleNoMatch: (List<String>, Repository) -> Unit = { args, repository ->
-    println("Command not found")
+val  handleHelp: (List<String>, Repository, View) -> Unit = { args, repository, view ->
+    view.showHelpResponse()
 }
 
-fun getHandler(args: List<String>) : (List<String>, Repository)->Unit {
+val  handleNoMatch: (List<String>, Repository, View) -> Unit = { args, repository, view ->
+    view.showNoMatchResponse(args[0])
+}
+
+fun getHandler(args: List<String>) : (List<String>, Repository, View)->Unit {
     return when(args[0]) {
         "add-task" -> handleAddTask
         "add-group" -> handleAddGroup
@@ -73,7 +79,7 @@ fun getHandler(args: List<String>) : (List<String>, Repository)->Unit {
         "mark-pending" -> handleMarkPending
         "list-tasks" -> handleListTasks
         "list-groups" -> handleListGroups
+        "help" -> handleHelp
         else -> handleNoMatch
-
     }
 }
