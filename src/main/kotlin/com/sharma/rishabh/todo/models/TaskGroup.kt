@@ -8,14 +8,14 @@ data class TaskGroup(
 ) {
 
     fun createTask(description: String): Int {
-        val task = Task(id, description)
         id++
+        val task = Task(id, description)
         tasks.add(task)
 
         return id
     }
 
-    private fun findTask(id: Int): Task {
+    fun findTask(id: Int): Task {
         return this.tasks.first {
             it.id == id
         }
@@ -41,7 +41,7 @@ data class TaskGroup(
 
     fun updateDescription(id: Int, newDescription: String): Int {
         val task = this.findTask(id)
-        task.markPending()
+        task.updateDescription(newDescription)
         return id
     }
 
