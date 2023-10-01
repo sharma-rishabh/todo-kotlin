@@ -4,35 +4,40 @@ import com.google.gson.Gson
 import com.sharma.rishabh.todo.models.Task
 import com.sharma.rishabh.todo.models.Todo
 import com.sharma.rishabh.todo.repositories.Repository
+import org.springframework.beans.factory.annotation.Value
 import java.io.File
 import java.nio.file.Paths
 import kotlin.io.path.createDirectory
 import kotlin.io.path.exists
 
-class FSRepository(private val path: String): Repository {
+@org.springframework.stereotype.Repository
+class FSRepository(
+    @Value("\${todo.home}")
+    private val home: String
+): Repository {
+    private lateinit var path: String
     private val gson = Gson()
-    private val file = File(path)
+    private lateinit var file: File
     override var todo: Todo? = null
 
-    companion object {
-        fun intialize(home: String): FSRepository  {
-            val homePath = Paths.get(home)
-            val todoDir = ".todo"
-            val dataFile = "data.json"
-            val dirPath = homePath.resolve(Paths.get(todoDir))
-            if (!dirPath.exists()) {
-               dirPath.createDirectory()
-            }
-            val dataPath = dirPath.resolve(Paths.get(dataFile))
-            if(!dataPath.exists()) {
-                val file = File(dataPath.toString())
-                file.writeText("{\"todos\":{}}")
-            }
-            val todo = FSRepository(dataPath.toString())
-            todo.loadTodo()
-            return todo
+    init {
+        val homePath = Paths.get(home)
+        val todoDir = ".todo"
+        val dataFile = "data.json"
+        val dirPath = homePath.resolve(Paths.get(todoDir))
+        if (!dirPath.exists()) {
+            dirPath.createDirectory()
         }
+        val dataPath = dirPath.resolve(Paths.get(dataFile))
+        if(!dataPath.exists()) {
+            val file = File(dataPath.toString())
+            file.writeText("{\"todos\":{}}")
+        }
+        this.path = dataPath.toString()
+        this.file = File(this.path)
+        this.loadTodo()
     }
+
     override fun loadTodo(): Boolean {
         val todoJSON = file.readText(Charsets.UTF_8)
         this.todo = gson.fromJson(todoJSON, Todo::class.java)

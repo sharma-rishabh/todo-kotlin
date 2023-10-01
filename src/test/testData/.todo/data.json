@@ -1,0 +1,67 @@
+{
+  "todos": {
+    "NewGroup": {
+      "groupName": "NewGroup",
+      "tasks": [
+        {
+          "id": 1,
+          "description": "NEW TASK",
+          "isDone": false,
+          "isDeleted": false
+        },
+        {
+          "id": 2,
+          "description": "OLD TASK",
+          "isDone": false,
+          "isDeleted": false
+        }
+      ],
+      "isDeleted": false,
+      "id": 2
+    },
+    "DeletedGroup": {
+      "groupName": "Group",
+      "tasks": [
+        {
+          "id": 1,
+          "description": "NEW TASK",
+          "isDone": false,
+          "isDeleted": false
+        },
+        {
+          "id": 2,
+          "description": "OLD TASK",
+          "isDone": false,
+          "isDeleted": false
+        }
+      ],
+      "isDeleted": true,
+      "id": 2
+    },
+    "Group": {
+      "groupName": "Group",
+      "tasks": [
+        {
+          "id": 1,
+          "description": "NEW TASK",
+          "isDone": false,
+          "isDeleted": true
+        },
+        {
+          "id": 2,
+          "description": "OLD TASK",
+          "isDone": false,
+          "isDeleted": false
+        },
+        {
+          "id": 3,
+          "description": "DELETED TASK",
+          "isDone": false,
+          "isDeleted": true
+        }
+      ],
+      "isDeleted": false,
+      "id": 2
+    }
+  }
+}
